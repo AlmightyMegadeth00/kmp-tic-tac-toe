@@ -43,21 +43,42 @@ fun App() {
             ) {
                 composable(route = "home") {
                     val viewModel = koinViewModel<GameBoardViewModel>()
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                    Column(
+                        Modifier.fillMaxWidth().padding(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = "home screen"
-                        )
-                    }
-                    Button(onClick = {
-                        loggingUtils.printToLogInfo("win = ${ValidatorUtils.checkForWinner(setOf(0,1,2))}")
+                        Button(onClick = {
+                            loggingUtils.printToLogInfo(
+                                "win = ${
+                                    ValidatorUtils.checkForWinner(
+                                        setOf(
+                                            0,
+                                            1,
+                                            2
+                                        )
+                                    )
+                                }"
+                            )
+                            loggingUtils.printBoardToLog(
+                                arrayOf(
+                                    "-",
+                                    "-",
+                                    "-",
+                                    "-",
+                                    "-",
+                                    "-",
+                                    "-",
+                                    "-",
+                                    "-"
+                                )
+                            )
 
-                    }, Modifier.padding(10.dp)) {
-                        Text(text = "generate turn",
-                            modifier = Modifier.padding(10.dp))
+                        }, Modifier.padding(10.dp)) {
+                            Text(
+                                text = "generate turn",
+                                modifier = Modifier.padding(10.dp)
+                            )
+                        }
                     }
                 }
             }
