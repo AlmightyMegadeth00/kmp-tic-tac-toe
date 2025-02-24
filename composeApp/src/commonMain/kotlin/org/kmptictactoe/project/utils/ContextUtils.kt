@@ -1,3 +1,7 @@
 package org.kmptictactoe.project.utils
 
-expect class ContextUtils
+import org.kmptictactoe.project.Player
+
+expect class ContextUtils {
+    fun notify(player: Player?)
+}

@@ -46,6 +46,7 @@ class GameBoardViewModel(private val contextUtils: ContextUtils,
                 playerTwoMovesSet.add(nextMove)
 
             if (ValidatorUtils.checkForWinner(currentPlayerMovesSet)) {
+                contextUtils.notify(currentPlayer)
                 resetBoard()
             }
             nextPlayer()
