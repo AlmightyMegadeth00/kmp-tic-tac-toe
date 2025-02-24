@@ -17,14 +17,13 @@ class SkynetCpuImpl: SkynetCpu {
         private val TAG = SkynetCpuImpl::class.simpleName
     }
 
-    private var difficulty: Difficulty = Difficulty.HARD
-
     /**
      * EASY: Computer will move using just random numbers remaining from moves list
      * MEDIUM: Computer will pick moves using random numbers, but complete the game when 2 in a row are found
      * HARD: Computer will favor moves that offer inherent advantages, play defensively if the player has
      * 2 cells in a row, and complete the game if it has 2 cells in a row
      */
+    private var difficulty: Difficulty = Difficulty.HARD
     override fun setDifficulty(difficulty: Difficulty) {
         this.difficulty = difficulty
     }

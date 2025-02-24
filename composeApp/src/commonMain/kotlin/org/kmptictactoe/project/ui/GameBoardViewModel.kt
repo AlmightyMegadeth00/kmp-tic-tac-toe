@@ -1,6 +1,12 @@
 package org.kmptictactoe.project.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.kmptictactoe.project.Player
 import org.kmptictactoe.project.utils.ContextUtils
 import org.kmptictactoe.project.utils.LoggingUtils
@@ -14,15 +20,17 @@ class GameBoardViewModel(private val contextUtils: ContextUtils,
         private val TAG = GameBoardViewModel::class.simpleName
     }
 
-    var currentPlayer = Player.PLAYER_ONE
-    // [O, O, X, O, X, X, O, O, X]
+    private var currentPlayer = Player.PLAYER_ONE
+
+    private val _completedMovesOutput = MutableStateFlow(arrayOf("-", "-", "-", "-", "-", "-", "-", "-", "-"))
+    var completedMovesOutputStateFlow = _completedMovesOutput.asStateFlow()
 
     //TODO: make reactive when the logic works
-    var moveIndexesRemaining = mutableSetOf(0, 1, 2, 3, 4, 5, 6, 7, 8)
+    private var moveIndexesRemaining = mutableSetOf(0, 1, 2, 3, 4, 5, 6, 7, 8)
     // used for logging the output
-    var completedMovesOutput = arrayOf("-", "-", "-", "-", "-", "-", "-", "-", "-")
-    val playerOneMovesSet = mutableSetOf<Int>()
-    val playerTwoMovesSet = mutableSetOf<Int>()
+    private var completedMovesOutput = arrayOf("-", "-", "-", "-", "-", "-", "-", "-", "-")
+    private val playerOneMovesSet = mutableSetOf<Int>()
+    private val playerTwoMovesSet = mutableSetOf<Int>()
 
     fun generateCpuMove() {
         val currentPlayerMovesSet =
@@ -40,6 +48,11 @@ class GameBoardViewModel(private val contextUtils: ContextUtils,
                 nextMove,
                 completedMovesOutput
             )
+            viewModelScope.launch {
+                loggingUtils.printToLogInfo("setting new completed moves set")
+                _completedMovesOutput.emit(completedMovesOutput)
+            }.start()
+
             if (currentPlayer == Player.PLAYER_ONE)
                 playerOneMovesSet.add(nextMove)
             else
@@ -48,26 +61,29 @@ class GameBoardViewModel(private val contextUtils: ContextUtils,
             if (ValidatorUtils.checkForWinner(currentPlayerMovesSet)) {
                 contextUtils.notify(currentPlayer)
                 resetBoard()
+                return
             }
             nextPlayer()
         } else {
             // draw game
             contextUtils.notify(null)
+            resetBoard()
         }
-        loggingUtils.printBoardToLog(completedMovesOutput)
+    }
+
+    fun resetBoard() {
+        completedMovesOutput = arrayOf("-", "-", "-", "-", "-", "-", "-", "-", "-")
+        moveIndexesRemaining = mutableSetOf(0, 1, 2, 3, 4, 5, 6, 7, 8)
+        playerTwoMovesSet.clear()
+        playerOneMovesSet.clear()
+        _completedMovesOutput.value = completedMovesOutput
+        currentPlayer = Player.PLAYER_ONE
     }
 
     private fun nextPlayer(): Player {
         val nextPlayer = if (currentPlayer == Player.PLAYER_ONE) Player.PLAYER_TWO else Player.PLAYER_ONE
         currentPlayer = nextPlayer
         return nextPlayer
-    }
-
-    private fun resetBoard() {
-        completedMovesOutput = arrayOf("-", "-", "-", "-", "-", "-", "-", "-", "-")
-        moveIndexesRemaining = mutableSetOf(0, 1, 2, 3, 4, 5, 6, 7, 8)
-        playerTwoMovesSet.clear()
-        playerOneMovesSet.clear()
     }
 
     private fun getBoardMoveOutputAsList(player: Player, nextMoveIndex: Int, currentBoardOutputArray: Array<String>): Array<String> {
