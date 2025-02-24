@@ -4,8 +4,11 @@ import androidx.lifecycle.ViewModel
 import org.kmptictactoe.project.Player
 import org.kmptictactoe.project.utils.ContextUtils
 import org.kmptictactoe.project.utils.LoggingUtils
+import org.kmptictactoe.project.utils.SkynetCpu
 
-class GameBoardViewModel(private val contextUtils: ContextUtils, private val loggingUtils: LoggingUtils): ViewModel() {
+class GameBoardViewModel(private val contextUtils: ContextUtils,
+                         private val loggingUtils: LoggingUtils,
+                         private val skynetCpu: SkynetCpu): ViewModel() {
     companion object {
         private val TAG = GameBoardViewModel::class.simpleName
     }
@@ -29,6 +32,8 @@ class GameBoardViewModel(private val contextUtils: ContextUtils, private val log
                 playerOneMovesSet else playerTwoMovesSet
 
         loggingUtils.printToLogInfo("current player = $currentPlayer")
+        loggingUtils.printBoardToLog(completedMovesOutput)
+        loggingUtils.printToLogInfo("next move is ${skynetCpu.getNextMove(moveIndexesRemaining, currentPlayerMovesSet, otherPlayerMovesSet)}")
     }
 
     private fun nextPlayer(): Player {
