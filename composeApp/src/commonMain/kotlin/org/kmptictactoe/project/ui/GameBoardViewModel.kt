@@ -5,6 +5,7 @@ import org.kmptictactoe.project.Player
 import org.kmptictactoe.project.utils.ContextUtils
 import org.kmptictactoe.project.utils.LoggingUtils
 import org.kmptictactoe.project.utils.SkynetCpu
+import org.kmptictactoe.project.utils.ValidatorUtils
 
 class GameBoardViewModel(private val contextUtils: ContextUtils,
                          private val loggingUtils: LoggingUtils,
@@ -31,9 +32,27 @@ class GameBoardViewModel(private val contextUtils: ContextUtils,
             if (currentPlayer != Player.PLAYER_ONE)
                 playerOneMovesSet else playerTwoMovesSet
 
-        loggingUtils.printToLogInfo("current player = $currentPlayer")
+        val nextMove = skynetCpu.getNextMove(moveIndexesRemaining, currentPlayerMovesSet, otherPlayerMovesSet)
+        if (nextMove != null) {
+            moveIndexesRemaining.remove(nextMove)
+            completedMovesOutput = getBoardMoveOutputAsList(
+                currentPlayer,
+                nextMove,
+                completedMovesOutput
+            )
+            if (currentPlayer == Player.PLAYER_ONE)
+                playerOneMovesSet.add(nextMove)
+            else
+                playerTwoMovesSet.add(nextMove)
+
+            if (ValidatorUtils.checkForWinner(currentPlayerMovesSet)) {
+                resetBoard()
+            }
+            nextPlayer()
+        } else {
+            // draw game
+        }
         loggingUtils.printBoardToLog(completedMovesOutput)
-        loggingUtils.printToLogInfo("next move is ${skynetCpu.getNextMove(moveIndexesRemaining, currentPlayerMovesSet, otherPlayerMovesSet)}")
     }
 
     private fun nextPlayer(): Player {
@@ -47,6 +66,13 @@ class GameBoardViewModel(private val contextUtils: ContextUtils,
         moveIndexesRemaining = mutableSetOf(0, 1, 2, 3, 4, 5, 6, 7, 8)
         playerTwoMovesSet.clear()
         playerOneMovesSet.clear()
+    }
+
+    private fun getBoardMoveOutputAsList(player: Player, nextMoveIndex: Int, currentBoardOutputArray: Array<String>): Array<String> {
+        if (currentBoardOutputArray[nextMoveIndex] != "-") return currentBoardOutputArray
+        currentBoardOutputArray[nextMoveIndex] = player.value
+        loggingUtils.printToLogInfo("Player ${player.value} sets board to ${currentBoardOutputArray.contentToString()}")
+        return currentBoardOutputArray
     }
 
 }

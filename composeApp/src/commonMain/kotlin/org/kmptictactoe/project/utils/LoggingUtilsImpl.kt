@@ -1,6 +1,7 @@
 package org.kmptictactoe.project.utils
 
 import com.diamondedge.logging.logging
+import org.kmptictactoe.project.Player
 
 interface LoggingUtils {
     fun printToLogInfo(output: String)
