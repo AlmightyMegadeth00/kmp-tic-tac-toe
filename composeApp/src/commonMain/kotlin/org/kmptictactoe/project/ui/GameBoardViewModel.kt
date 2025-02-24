@@ -21,6 +21,13 @@ class GameBoardViewModel(private val contextUtils: ContextUtils, private val log
     val playerTwoMovesSet = mutableSetOf<Int>()
 
     fun generateCpuMove() {
+        val currentPlayerMovesSet =
+            if (currentPlayer == Player.PLAYER_ONE)
+                playerOneMovesSet else playerTwoMovesSet
+        val otherPlayerMovesSet =
+            if (currentPlayer != Player.PLAYER_ONE)
+                playerOneMovesSet else playerTwoMovesSet
+
         loggingUtils.printToLogInfo("current player = $currentPlayer")
     }
 
