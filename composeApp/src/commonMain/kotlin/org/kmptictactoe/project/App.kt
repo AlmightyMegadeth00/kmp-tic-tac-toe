@@ -49,16 +49,7 @@ fun App() {
                     ) {
                         Button(onClick = {
                             loggingUtils.printToLogInfo(
-                                "win = ${
-                                    ValidatorUtils.checkForWinner(
-                                        setOf(
-                                            0,
-                                            1,
-                                            2
-                                        )
-                                    )
-                                }"
-                            )
+                                "current player is: ${viewModel.currentPlayer}")
                             loggingUtils.printBoardToLog(
                                 arrayOf(
                                     "-",
