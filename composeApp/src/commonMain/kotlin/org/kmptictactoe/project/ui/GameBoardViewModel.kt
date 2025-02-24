@@ -52,6 +52,7 @@ class GameBoardViewModel(private val contextUtils: ContextUtils,
             nextPlayer()
         } else {
             // draw game
+            contextUtils.notify(null)
         }
         loggingUtils.printBoardToLog(completedMovesOutput)
     }
