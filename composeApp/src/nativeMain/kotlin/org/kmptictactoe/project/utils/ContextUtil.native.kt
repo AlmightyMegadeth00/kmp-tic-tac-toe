@@ -1,3 +1,3 @@
 package org.kmptictactoe.project.utils
 
-actual class ContextUtil
+actual class ContextUtils

@@ -2,6 +2,6 @@ package org.kmptictactoe.project.utils
 
 import android.content.Context
 
-actual class ContextUtil(
+actual class ContextUtils(
     private val context: Context
 )

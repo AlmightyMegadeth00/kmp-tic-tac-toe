@@ -1,3 +1,3 @@
 package org.kmptictactoe.project.utils
 
-expect class ContextUtil
+expect class ContextUtils
