@@ -56,6 +56,14 @@ fun App() {
                                 modifier = Modifier.padding(10.dp)
                             )
                         }
+                        Button(onClick = {
+                            viewModel.resetBoard()
+                        }, Modifier.padding(10.dp)) {
+                            Text(
+                                text = "reset",
+                                modifier = Modifier.padding(10.dp)
+                            )
+                        }
                     }
                 }
             }

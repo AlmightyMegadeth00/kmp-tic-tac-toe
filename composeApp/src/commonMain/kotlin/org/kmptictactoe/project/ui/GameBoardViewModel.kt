@@ -63,7 +63,7 @@ class GameBoardViewModel(private val contextUtils: ContextUtils,
         return nextPlayer
     }
 
-    private fun resetBoard() {
+    fun resetBoard() {
         completedMovesOutput = arrayOf("-", "-", "-", "-", "-", "-", "-", "-", "-")
         moveIndexesRemaining = mutableSetOf(0, 1, 2, 3, 4, 5, 6, 7, 8)
         playerTwoMovesSet.clear()
