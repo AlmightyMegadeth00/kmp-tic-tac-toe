@@ -48,21 +48,7 @@ fun App() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Button(onClick = {
-                            loggingUtils.printToLogInfo(
-                                "current player is: ${viewModel.currentPlayer}")
-                            loggingUtils.printBoardToLog(
-                                arrayOf(
-                                    "-",
-                                    "-",
-                                    "-",
-                                    "-",
-                                    "-",
-                                    "-",
-                                    "-",
-                                    "-",
-                                    "-"
-                                )
-                            )
+                            viewModel.generateCpuMove()
 
                         }, Modifier.padding(10.dp)) {
                             Text(
